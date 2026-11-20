@@ -10,9 +10,11 @@ from __future__ import annotations
 def average(values, default=0):
     """Среднее арифметическое списка."""
     total = 0
+    count = 0
     for v in values:
         total += v
-    return total / len(values) if values else default
+        count += 1
+    return total / count if count else default
 
 
 def median(values):
@@ -38,8 +40,14 @@ def percent_change(old, new):
 
 
 def summary(values):
-    """Краткая сводка по списку чисел."""
-    if not values:
+    """Краткая сводка по списку чисел.
+
+    Для пустого входа (а также для любого итерируемого объекта без
+    элементов) возвращает словарь с нулевыми значениями вместо
+    исключения ``ValueError`` от ``min()``/``max()``.
+    """
+    data = list(values)
+    if not data:
         return {
             "count": 0,
             "sum": 0,
@@ -49,12 +57,12 @@ def summary(values):
             "max": 0,
         }
     return {
-        "count": len(values),
-        "sum": sum(values),
-        "avg": average(values),
-        "median": median(values),
-        "min": min(values),
-        "max": max(values),
+        "count": len(data),
+        "sum": sum(data),
+        "avg": average(data),
+        "median": median(data),
+        "min": min(data),
+        "max": max(data),
     }
 
 
@@ -64,7 +72,7 @@ class Accumulator:
     def __init__(self, items=None):
         if items is None:
             items = []
-        self.items = items
+        self.items = list(items)
 
     def add(self, value):
         self.items.append(value)
