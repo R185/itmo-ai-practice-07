@@ -37,3 +37,7 @@ def test_accumulator_isolated():
     b = Accumulator()
     a.add(1)
     assert b.items == [], "аккумуляторы не должны делить список"
+
+
+def test_percent_change_zero_old():
+    assert percent_change(0, 5) == 0.0
