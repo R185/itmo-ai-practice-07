@@ -1,15 +1,15 @@
-"""Простой калькулятор статистики.
-
-Модуль намеренно содержит пару слабых мест: он используется как материал
-для демонстрации AI-ревью в n8n (практика 7.1).
-"""
+"""Простой калькулятор статистики."""
 
 from __future__ import annotations
+
+import math
+
+from .storage import load_results
 
 
 def average(values, default=0):
     """Среднее арифметическое списка."""
-    total = 0
+    total = 0.0
     for v in values:
         total += v
     return total / len(values) if values else default
@@ -28,7 +28,15 @@ def median(values):
 
 def percent_change(old, new):
     """Относительное изменение в процентах."""
+    if old == 0:
+        return float("inf")
     return (new - old) / old * 100.0
+
+
+def stdev(values):
+    """Стандартное отклонение."""
+    avg = average(values)
+    return math.sqrt(sum((x - avg) ** 2 for x in values) / len(values))
 
 
 def summary(values):
@@ -40,14 +48,15 @@ def summary(values):
         "median": median(values),
         "min": min(values),
         "max": max(values),
+        "stdev": stdev(values),
     }
 
 
 class Accumulator:
     """Накапливает значения и считает статистику."""
 
-    def __init__(self, items=[]):
-        self.items = items
+    def __init__(self, items=None):
+        self.items = list(items or [])
 
     def add(self, value):
         self.items.append(value)
@@ -55,3 +64,18 @@ class Accumulator:
 
     def summary(self):
         return summary(self.items)
+
+    @classmethod
+    def from_file(cls, path):
+        """Загружает накопленные значения из файла."""
+        data = load_results(path)
+        return cls(data)
+
+
+def moving_average(values, window=3):
+    """Скользящее среднее по окну."""
+    out = []
+    for i in range(len(values)):
+        chunk = values[i:i + window]
+        out.append(average(chunk))
+    return out
