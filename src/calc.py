@@ -44,8 +44,8 @@ def summary(values):
         "sum": sum(values),
         "avg": average(values),
         "median": median(values),
-        "min": min(values),
-        "max": max(values),
+        "min": min(values, default=0),
+        "max": max(values, default=0),
     }
 
 
