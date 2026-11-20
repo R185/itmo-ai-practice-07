@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from calc import Accumulator, average, median, percent_change, summary  # noqa: E402
+from calc import Accumulator, average, median, percent_change, stdev, summary  # noqa: E402
 
 
 def test_average_basic():
@@ -26,10 +26,23 @@ def test_percent_change():
     assert percent_change(10, 12) == 20
 
 
+def test_percent_change_zero_old():
+    assert percent_change(0, 5) == float("inf")
+
+
+def test_stdev_basic():
+    assert round(stdev([2, 4, 4, 4, 5, 5, 7, 9]), 3) == 2.0
+
+
+def test_stdev_constant():
+    assert stdev([3, 3, 3]) == 0
+
+
 def test_summary_keys():
     s = summary([1, 2, 3])
     assert s["count"] == 3
     assert s["sum"] == 6
+    assert "stdev" in s
 
 
 def test_accumulator_isolated():
