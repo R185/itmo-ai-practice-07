@@ -28,6 +28,8 @@ def median(values):
 
 def percent_change(old, new):
     """Относительное изменение в процентах."""
+    if old == 0:
+        return 0.0
     return (new - old) / old * 100.0
 
 
