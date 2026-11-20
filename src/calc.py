@@ -39,6 +39,15 @@ def percent_change(old, new):
 
 def summary(values):
     """Краткая сводка по списку чисел."""
+    if not values:
+        return {
+            "count": 0,
+            "sum": 0,
+            "avg": 0,
+            "median": 0,
+            "min": 0,
+            "max": 0,
+        }
     return {
         "count": len(values),
         "sum": sum(values),
