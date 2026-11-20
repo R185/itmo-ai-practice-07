@@ -46,7 +46,9 @@ def summary(values):
 class Accumulator:
     """Накапливает значения и считает статистику."""
 
-    def __init__(self, items=[]):
+    def __init__(self, items=None):
+        if items is None:
+            items = []
         self.items = items
 
     def add(self, value):
