@@ -41,3 +41,8 @@ def test_accumulator_isolated():
 
 def test_percent_change_zero_old():
     assert percent_change(0, 5) == 0.0
+
+
+def test_summary_empty():
+    s = summary([])
+    assert s == {"count": 0, "sum": 0, "avg": 0, "median": 0, "min": 0, "max": 0}
